@@ -2,6 +2,7 @@
 #define MAX 100
 #include <string.h>
 #include <stdlib.h>
+#include <conio.h>
 struct Patient {
 	char cardId[10];
 	char name[50];
@@ -15,30 +16,56 @@ struct Record{
 	char date[20];
 	char status[20];
 };
-Record rd;
-Patient listPatients[MAX];
-int n_patients=0;
+Record listRecords[MAX];//Danh sach lich su kham
+Patient listPatients[MAX];//Danh sach benh nhan
+int n_patients=9;
+int page=1;
+int itemsPerPage=5;
 int patientIdExisted(const char cardId[]);
 void createNewPatient();
 void updatePatientInfo();
 void dischargePatient();
 void showCurrentPatients();
-
+void searchPatient();
+void sortByDebt();
+void medicalCheck();
 int main(){
-	int choose;
 	struct Patient pt;
+	Patient pt1={"001","Nguyen Bao Anh","0912345678",500000,5};
+	Patient pt2={"002","Nguyen Nhu Quynh","0925478136",100000,6};
+	Patient pt3={"003","Nguyen Nhu Hoa","0922578136",100000,6};
+	Patient pt4={"004","Le Van Huy","0912478136",200000,6};
+	Patient pt5={"005","Tran Van Nam","0925456136",300000,8};
+	Patient pt6={"006","Nguyen Thi Nhu Quynh","0925478136",100000,3};
+	Patient pt7={"007","Cao Xuan Cuong","0925478198",200000,6};
+	Patient pt8={"008","Nguyen Thi Khanh Huyen","0925426136",100000,9};
+	Patient pt9={"009","Pham Anh Dung","0895426136",0,9};
+	Patient pt10={"010","Pham Thi Dung","0894526136",20000000,1};
+	
+	listPatients[0]=pt1;
+	listPatients[1]=pt2;
+	listPatients[2]=pt3;
+	listPatients[3]=pt4;
+	listPatients[4]=pt5;
+	listPatients[5]=pt6;
+	listPatients[6]=pt7;
+	listPatients[7]=pt8;
+	listPatients[8]=pt9;
+	listPatients[9]=pt10;
+	int choose;
+	
 	while(1){
-
-		printf("\n========== Quan ly benh nhan ==========\n");
-		printf("1.Tiep nhan benh nhan.\n");
-		printf("2.Cap nhat thong tin benh nhan.\n");
-		printf("3.Xuat vien.\n");
-		printf("4.Hien thi danh sach benh nhan.\n");
-		printf("5.Tim kiem benh nhan.\n");
-		printf("6.Sap xep danh sach benh nhan.\n");
-		printf("7.Ghi nhan khma benh.\n");
-		printf("8.Xem lich su kham benh.\n");
-		printf("---------------------------------------\n");
+		system("cls");
+		printf("\n++========== Quan ly benh nhan ===========++\n");
+		printf("||1.Tiep nhan benh nhan.                  ||\n");
+		printf("||2.Cap nhat thong tin benh nhan.         ||\n");
+		printf("||3.Xuat vien.                            ||\n");
+		printf("||4.Hien thi danh sach benh nhan.         ||\n");
+		printf("||5.Tim kiem benh nhan.                   ||\n");
+		printf("||6.Sap xep danh sach benh nhan.          ||\n");
+		printf("||7.Ghi nhan khma benh.                   ||\n");
+		printf("||8.Xem lich su kham benh.                ||\n");
+		printf("++----------------------------------------++\n");
 		printf("\n");
 		printf("Nhap lua chon:");
 		scanf("%d",&choose);
@@ -61,8 +88,23 @@ int main(){
 				break;
 			}
 			case 5:{
+				searchPatient();
 				break;
 			}
+			case 6:{
+				sortByDebt();
+				getchar();
+				break;
+			}
+			case 7:{
+				medicalCheck();
+				break;
+			}
+			case 8:{
+				
+				break;
+			}
+			
 		}
 	}
 }
@@ -150,6 +192,7 @@ void createNewPatient(){
 		
 	n_patients ++;// cap nhat danh sach benh nhan
 	printf("=> TIEP NHAN BENH NHAN THANH CONG.\n");
+	getchar();
 }
 //F02: Cap nhat thong tin benh nhan
 void updatePatientInfo() {
@@ -178,11 +221,12 @@ void updatePatientInfo() {
             printf("=>Khong ton tai ID nay!\n");
             continue;
         }
-        printf("Da tim thay thong tin benh nhan %s!\n",listPatients[index].name);
+        printf("Da tim thay thong tin benh nhan!!!\n");
         break; 
     }
     
     printf("=====Cap nhat thong tin benh nhan=====\n");
+    printf("Ten benh nhan:%s\n",listPatients[index].name);
     while (1) {
         printf("Nhap so dien thoai moi(10-14 so),hien tai:%s): ",listPatients[index].phone);
         fgets(listPatients[index].phone, sizeof(listPatients[index].phone), stdin);
@@ -218,6 +262,7 @@ void updatePatientInfo() {
 		break;
 	}
     printf("=> CAP NHAT THANH CONG!\n");
+    getchar();
 
 }
 //F03:Xoa thong tin benh nhan
@@ -252,51 +297,216 @@ void dischargePatient(){
         break; 
     }
     if(listPatients[index].debt>0){
-    	printf("CANH BAO BENH NHAN CHUA DONG TIEN VIEN PHI!!!\n");
-	}else{
-		printf("Benh nhan da xuat vien truoc do.\n");
+    	printf("CANH BAO BENH NHAN CHUA DONG TIEN VIEN PHI!!!KHONG THE XUAT VIEN.\n");
+    	printf("Cong no hien tai:%.lf\n",listPatients[index].debt);
+    	getchar();
 	}
-	printf("Xac nhan benh nhan co xuat vien hay khong?\n1:Co\n2:khong\nNhap:");
-	scanf("%d",&choice);
-	switch (choice){
-		case 1:{
-			for(int i=index;i<n_patients-1;i++){
-				listPatients[i]=listPatients[i+1];
+	if(listPatients[index].debt==0){
+		printf("Benh nhan da hoan thanh dong vien phi.\n");
+		printf("Xac nhan benh nhan co xuat vien hay khong?\n1:Co\n2:khong\nNhap:");
+		scanf("%d",&choice);
+		switch (choice){
+			case 1:{
+				for(int i=index;i<n_patients-1;i++){
+					listPatients[i]=listPatients[i+1];
+				}
+				printf("Xuat vien thanh cong!\n");
+				n_patients--;
+				getchar();
+				break;
 			}
-			printf("Xuat vien thanh cong!\n");
-			n_patients--;
-			break;
-		}
-		case 2:{
-			printf("Huy xuat vien!\n");
-			break;
-		}
-	}  
+			case 2:{
+				printf("Huy xuat vien!\n");
+				getchar();
+				break;
+			}
+		}  
+	}
 }
+	
 //F04:Hien thi danh sach benh nhan 
 void showCurrentPatients(){
+	int pageSize=5;
+	int page=1;
+	int totalPages;
+	char choice;
+	int start,end;
 	if(n_patients==0){
-		printf("Danh sach trong!\n");
+		printf("Danh sach benh nhan trong!\n");
 		return;
 	}
-	printf("+--------------DANH SACH BENH NHAN--------------+\n");
-	for(int i=0;i<n_patients;i++){  
-		printf("Ma benh nhan:BN%s\n",listPatients[i].cardId);
-		printf("Ten benh nhan:%s\n",listPatients[i].name);
-		printf("So cong no:%.lf\n",listPatients[i].debt);
-		printf("So dien thoai:%s\n",listPatients[i].phone);
-		printf("So ngay kham benh:%d\n",listPatients[i].visitDays);
+	totalPages=n_patients/pageSize+((n_patients%pageSize==0)?0:1);
+	while(1){
+		system("cls");
+		printf("Danh sach benh nhan (trang %d/%d)\n",page,totalPages);
+		printf("|Ma BN     |Ten BN                        |SDT            |debt(VND)      |So ngay kham benh|\n");
+		for(int i=0;i<93;i++){
+			printf("-");
+		}
 		printf("\n");
+		start=(page-1)*pageSize;
+		end=start+pageSize;
+		if(end>n_patients){
+			end=n_patients;
+		}
+		for(int i=start;i<end;i++){
+			printf("|%-10s|%-30s|%-15s|%-15.lf|%-17d|\n",listPatients[i].cardId,listPatients[i].name,listPatients[i].phone,listPatients[i].debt,listPatients[i].visitDays);
+		}
+		for(int i=0;i<93;i++){
+			printf("-");
+		}
+		printf("\n");
+		printf("Nhan 'N'=Trang sau,'P'=Trang truoc;'R'=Thoat\n");
+		choice=getchar();
+		getchar();
+		if(choice=='n'||choice=='N'){
+			if(page<totalPages){
+				page++;
+			}else{
+				printf("Da o trang cuoi!!!\n");
+				getchar();
+			}
+		}else if(choice=='p'||choice=='P'){
+			if(page>totalPages){
+				page--;
+			}else{
+				printf("Dang o trang dau!!!\n");
+				getchar();
+			}
+		}else if(choice=='r'||choice=='R'){
+			return;
+		}else{
+			("Phim nhap vao khong hop le.\n");	
+		}			
 	}
-	printf("+-----------------------------------------------+\n");
-	
 }
-void searchPatient(){
+void searchPatient(){//F05:Tim kiem benh nhan 
 	char findName[50];
 	printf("\nTIM KIEM BENH NHAN\n");
 	printf("Nhap ten benh nhan:");
 	fgets(findName,sizeof(findName),stdin);
+	findName[strcspn(findName,"\n")]='\0';
+	int found=0;
+		for(int i=0;i<93;i++){
+		printf("=");
+	}
+	printf("\n");
+	printf("|Ma BN     |Ten BN                        |SDT            |debt(VND)      |So ngay kham benh|\n");
+	for(int i=0;i<n_patients;i++){
+			if(strstr(listPatients[i].name,findName)!=NULL){
+				found=1;
+				printf("|%-10s|%-30s|%-15s|%-15.lf|%-17d|\n",listPatients[i].cardId,listPatients[i].name,listPatients[i].phone,listPatients[i].debt,listPatients[i].visitDays);
+			}
+		}
+	for(int i=0;i<93;i++){
+		printf("=");
+	}
+	printf("\n");		
+	if(!found){
+		printf("Khong tim thay ten trong danh sach benh nhan\n");
+	}	
+
+	getchar();	
+	}
+void sortByDebt(){ //F06:Sap xep danh sach benhn nhan theo debt
+	if(n_patients==0){
+		printf("Danh sach benh nhan trong!!!\n");
+		getchar();
+		return;
+	}
+	int choice;
+	printf("Sap xep danh sach benh nhan theo cong no.\n");
+	printf("Nhap kieu sap xep(1.Tang,2.Giam):\n");
+	scanf("%d",&choice);
+	switch(choice){
+		case 1:{
+			struct Patient temp;
+			for(int i=0;i<n_patients-1;i++){
+				for(int j=0;j<n_patients-i-1;j++){
+					if(listPatients[j].debt>listPatients[j+1].debt){
+						temp=listPatients[j];
+						listPatients[j]=listPatients[j+1];
+						listPatients[j+1]=temp;
+					}							
+				}
+			}
+			printf("DANH SACH BENH NHAN\n");
+			for(int i=0;i<93;i++){
+				printf("=");
+			}
+			printf("\n");
+			printf("|Ma BN     |Ten BN                        |SDT            |debt(VND)      |So ngay kham benh|\n");
+			for(int i=0;i<n_patients;i++){  
+				printf("|%-10s|%-30s|%-15s|%-15.lf|%-17d|\n",listPatients[i].cardId,listPatients[i].name,listPatients[i].phone,listPatients[i].debt,listPatients[i].visitDays);
+			}
+			for(int i=0;i<93;i++){
+				printf("=");
+			}
+			printf("\n");
+			getchar();			
+			break;
+		}
+		case 2:{
+			struct Patient temp;
+			for(int i=0;i<n_patients-1;i++){
+				for(int j=0;j<n_patients-i-1;j++){
+					if(listPatients[j].debt<listPatients[j+1].debt){
+						temp=listPatients[j];
+						listPatients[j]=listPatients[j+1];
+						listPatients[j+1]=temp;
+					}							
+				}
+			}
+			printf("DANH SACH BENH NHAN\n");
+			for(int i=0;i<93;i++){
+				printf("=");
+			}
+			printf("\n");
+			printf("|Ma BN     |Ten BN                        |SDT            |debt(VND)      |So ngay kham benh|\n");
+			for(int i=0;i<n_patients;i++){  
+				printf("|%-10s|%-30s|%-15s|%-15.lf|%-17d|\n",listPatients[i].cardId,listPatients[i].name,listPatients[i].phone,listPatients[i].debt,listPatients[i].visitDays);
+			}
+			for(int i=0;i<93;i++){
+				printf("=");
+			}
+			printf("\n");
+			getchar();						
+			break;
+		}
+			
+			}
+	
+}
+void medicalCheck(){
+	char checkId[10];
+	int day,month,year;
+	printf("Nhap ma BN:");
+	fgets(checkId,sizeof(checkId),stdin);
+	fflush(stdin);
+	int pos=-1;
+	for(int i=0;i<n_patients;i++){
+		if(strcmp(listPatients[i].cardId,checkId)==0){
+			pos=1;
+			break;
+		}
+	}
+	if(pos==-1){
+		printf("Khong tim thay benh nhan co ma %s\n",checkId);
+	}	
+	printf("Nhap ngay kham:");
+	scanf("%d/%d/%d",&day,&month,&year);
+	getchar();
+
 	
 	
 }
+	
+	
+	
+	
+
+	
+	
+	
+
 
