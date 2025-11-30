@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <conio.h>
+#include <ctype.h>
 struct Patient {
 	char cardId[10];
 	char name[50];
@@ -182,6 +183,16 @@ int availble(char phone[]){//Kiem tra sdt co hop le ko
     }
     return 1;      
 }
+int onlyAlphabet(const char *str) {
+    int i = 0;
+    while (str[i] != '\0') {
+        if (!isalpha(str[i])&& str[i]!=' ') {
+            return 0;
+        }
+        i++;
+    }
+    return 1;
+}
 //F01:Tiep nhan benh nhan
 void createNewPatient(){
 
@@ -210,6 +221,9 @@ void createNewPatient(){
 		listPatients[pos].name[strcspn(listPatients[pos].name, "\n")] = '\0';
 		if(strlen(listPatients[pos].name)==0){
 			printf("Khong duoc de trong!\n");
+			continue;
+		}else if(!onlyAlphabet(listPatients[pos].name)){
+			printf("Ten benh nhan chi chua ky tu chu cai.\n");
 			continue;
 		}
 		break;
@@ -596,6 +610,7 @@ void medicalCheck(){//F07:Ghi nhan kham benh
 			printf("Tao record thanh cong\n");
 			break;
 		}
+		
 	getchar();
 }
 void medicalHistory(){ //F04:lich su kham benh cua benh nhan 
