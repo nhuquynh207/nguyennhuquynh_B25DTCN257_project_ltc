@@ -125,11 +125,11 @@ int main(){
 				break;
 			}
 			case 9:{
-				printf("Thong bao:Tam biet.\n");
+				printf("Hen gap lai.\n");
 				exit(0);
 				break;
 			}default:
-				printf("=>LOI:chuc nng khong ton tai!!!");
+				printf("=>LOI:chuc nang khong ton tai!!!");
 				getchar();
 			
 		}
@@ -150,7 +150,7 @@ int isFull() {//kiem tra mang da day chx
         return 0;
     }
 }
-int isValidDate(const char *dateStr) {
+int isValidDate(const char *dateStr) {//Kiem tra ngay thang hop le
     int day, month, year;
     int maxDay;
     if (sscanf(dateStr, "%d/%d/%d", &day, &month, &year) != 3) {
@@ -175,7 +175,7 @@ int isValidDate(const char *dateStr) {
     }
     return 1;
 }
-int availble(char phone[]) {//Kiem tra sdt co hop le ko
+int availble(char phone[]){//Kiem tra sdt co hop le ko
     for (int i = 0; phone[i] != '\0'; i++) {
         if (phone[i] < '0' || phone[i] > '9')
             return 0;  
