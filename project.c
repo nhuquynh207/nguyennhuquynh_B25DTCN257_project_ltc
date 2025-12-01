@@ -634,7 +634,7 @@ void medicalCheck(){//F07:Ghi nhan kham benh
 		}
 	getchar();
 }
-void medicalHistory(){ //F04:lich su kham benh cua benh nhan 
+void medicalHistory(){ //F08:lich su kham benh cua benh nhan 
 	char inputId[10];
 	int index=-1;
 	int found = 0;
