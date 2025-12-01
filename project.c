@@ -2,7 +2,6 @@
 #define MAX 100
 #include <string.h>
 #include <stdlib.h>
-#include <conio.h>
 #include <ctype.h>
 typedef struct Patient {
 	char cardId[10];
@@ -303,7 +302,7 @@ void updatePatientInfo() {
 				printf("=>Khong duoc de trong!\n");
 				continue;
         }else if (strlen(listPatients[index].phone) < 9 || strlen(listPatients[index].phone) > 15) {
-            printf("=>So dien thoai khong hop le (9?15 so)!\n");
+            printf("=>So dien thoai khong hop le (9-14 so)!\n");
             continue;
         }else if(!availble(listPatients[index].phone)){
         	printf("=>Chi duoc nhap so!\n");
@@ -388,7 +387,7 @@ void showCurrentPatients(){
 	int pageSize=4;
 	int page=1;
 	int totalPages;
-	char choice;
+	char input[5];
 	int start,end;
 	if(n_patients==0){
 		printf("Danh sach benh nhan trong!\n");
@@ -417,31 +416,33 @@ void showCurrentPatients(){
 			printf("-");
 		}
 		printf("\n");
+		printf("Chon trang (1-%d),hoac:\n",totalPages);
 		printf("Nhan 'N'=Trang sau,'P'=Trang truoc;'R'=Thoat\n");
-		printf("Nhap:");
-		choice=getchar();
-		getchar();
-		if(choice=='n'||choice=='N'){
-			if(page<totalPages){
-				page++;
-			}else{
-				printf("Da o trang cuoi!!!\n");
-				getchar();
-			}
-		}else if(choice=='p'||choice=='P'){
-			if(page>1){
-				page--;
-			}else{
-				printf("Dang o trang dau!!!\n");
-				getchar();
-			}
-		}else if(choice=='r'||choice=='R'){
-			break;
-		}else{
-			printf("Phim nhap vao khong hop le.\n");
-			getchar();	
-		}			
-	}
+		printf("Nhap lua chon:");
+		fgets(input, sizeof(input), stdin);
+        input[strcspn(input, "\n")] = '\0';
+		if(strcmp(input, "N") == 0 || strcmp(input, "n") == 0){
+            if(page < totalPages) page++;
+            else { printf("Dang o trang cuoi!\n"); getchar(); }
+        }
+        else if(strcmp(input, "P") == 0 || strcmp(input, "p") == 0){
+            if(page > 1) page--;
+            else { printf("Dang o trang dau!\n"); getchar(); }
+        }
+        else if(strcmp(input, "R") == 0 || strcmp(input, "r") == 0){
+            break;
+        }
+        else {
+            int selectedPage = atoi(input); 
+
+            if(selectedPage >= 1 && selectedPage <= totalPages){
+                page = selectedPage;
+            } else {
+                printf("Lua chon khong hop le!\n");
+                getchar();
+            }
+        }
+    }
 }
 void searchPatient(){//F05:Tim kiem benh nhan 
 	char findName[50];
