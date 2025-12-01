@@ -445,23 +445,33 @@ void showCurrentPatients(){
 }
 void searchPatient(){//F05:Tim kiem benh nhan 
 	char findName[50];
+	char lowerFindName[50]; 
+    char lowerPatientName[50];
+    int i=0,j=0;
 	printf("\nTIM KIEM BENH NHAN\n");
 	printf("Nhap ten benh nhan:");
 	fgets(findName,sizeof(findName),stdin);
 	findName[strcspn(findName,"\n")]='\0';
+	strcpy(lowerFindName,findName);
+    for(i = 0; lowerFindName[i]; i++){
+        lowerFindName[i] = tolower(lowerFindName[i]);
+    }
 	int found=0;
-	int i=0;
 	for(i=0;i<93;i++){
 		printf("=");
 	}
 	printf("\n");
 	printf("|Ma BN     |Ten BN                        |SDT            |debt(VND)      |So ngay kham benh|\n");
 	for(i=0;i<n_patients;i++){
-			if(strstr(listPatients[i].name,findName)!=NULL){
-				found=1;
-				printf("|%-10s|%-30s|%-15s|%-15.lf|%-17d|\n",listPatients[i].cardId,listPatients[i].name,listPatients[i].phone,listPatients[i].debt,listPatients[i].visitDays);
-			}
+		strcpy(lowerPatientName, listPatients[i].name);
+		for(j = 0; lowerPatientName[j]; j++){
+            lowerPatientName[j] = tolower(lowerPatientName[j]);
+        }
+		if(strstr(lowerPatientName, lowerFindName) != NULL){
+			found=1;
+			printf("|%-10s|%-30s|%-15s|%-15.lf|%-17d|\n",listPatients[i].cardId,listPatients[i].name,listPatients[i].phone,listPatients[i].debt,listPatients[i].visitDays);
 		}
+	}
 	for(i=0;i<93;i++){
 		printf("=");
 	}
