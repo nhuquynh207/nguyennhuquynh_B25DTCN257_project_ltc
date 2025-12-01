@@ -60,7 +60,7 @@ int main(){
 	Record r2={"RC002","102","21/1/2025","Tai kham"};
 	Record r3={"RC003","103","20/8/2025","Theo doi"};
 	Record r4={"RC004","104","12/11/2025","Tai kham"};
-	Record r5={"RC005","105","31/10/2025","Theo doi"};
+	Record r5={"RC005","105","31/10/2025","Da xuat vien"};
 	
 	listRecords[0]=r1;
 	listRecords[1]=r2;
