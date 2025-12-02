@@ -16,9 +16,9 @@ typedef struct Record{
 	char date[20];
 	char status[20];
 }Record;
-struct Record listRecords[MAX];//Danh sach lich su kham
+struct Record listRecords[MAX];
 int n_records=5;
-struct Patient listPatients[MAX];//Danh sach benh nhan
+struct Patient listPatients[MAX];
 int n_patients=10;
 int page=1;
 int itemsPerPage=5;
@@ -134,7 +134,7 @@ int main(){
 		}
 	}
 }
-int patientIdExisted(const char cardId[]){ //const dam bao khong thay doi du lieu,kiem tra cardid
+int patientIdExisted(const char cardId[]){ 
 	int i=0;
 	for(i=0;i<n_patients;i++){
 		if(strcmp(listPatients[i].cardId,cardId)==0){
@@ -143,14 +143,14 @@ int patientIdExisted(const char cardId[]){ //const dam bao khong thay doi du lie
 	}
 	return 1;
 }
-int isFull() {//kiem tra mang da day chx
+int isFull() {
     if (n_patients >= MAX) {
         return 1;
     } else {
         return 0;
     }
 }
-int isValidDate(const char *dateStr) {//Kiem tra ngay thang hop le
+int isValidDate(const char *dateStr) {
     int day, month, year;
     int maxDay;
     if (sscanf(dateStr, "%d/%d/%d", &day, &month, &year) != 3) {
@@ -175,7 +175,7 @@ int isValidDate(const char *dateStr) {//Kiem tra ngay thang hop le
     }
     return 1;
 }
-int availble(char phone[]){//Kiem tra sdt co hop le ko
+int availble(char phone[]){
 	int i=0;
     for (i = 0; phone[i] != '\0'; i++) {
         if (phone[i] < '0' || phone[i] > '9')
@@ -219,7 +219,15 @@ void createNewPatient(){
 		printf("Nhap ten benh nhan:");
 		fgets(listPatients[pos].name,sizeof(listPatients[pos].name),stdin);
 		listPatients[pos].name[strcspn(listPatients[pos].name, "\n")] = '\0';
-		if(strlen(listPatients[pos].name)==0){
+		int onlySpace=1;
+		int i=0;
+		for(i=0;listPatients[pos].name[i]!='\0';i++){
+			if(listPatients[pos].name[i]!=' '){
+				onlySpace=0;
+				break;
+			}
+		}
+		if(strlen(listPatients[pos].name)==0||onlySpace){
 			printf("Khong duoc de trong!\n");
 			continue;
 		}else if(!onlyAlphabet(listPatients[pos].name)){
@@ -256,7 +264,7 @@ void createNewPatient(){
 		break;
 	}
 	listPatients[pos].visitDays=0;
-	n_patients ++;// cap nhat danh sach benh nhan
+	n_patients ++;
 	printf("=> TIEP NHAN BENH NHAN THANH CONG.\n");
 	getchar();
 }
