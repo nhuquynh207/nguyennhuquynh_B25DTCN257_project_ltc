@@ -340,7 +340,8 @@ void dischargePatient() {
         }
         break;
     }
-    for (int i = 0; i < n_patients; i++) {
+    int i=0;
+    for (i = 0; i < n_patients; i++) {
         if (strcmp(listPatients[i].cardId, findId) == 0) {
             index = i;
             break;
@@ -366,28 +367,29 @@ void dischargePatient() {
         while (getchar() != '\n');
         if (choice == 2) {
             printf("=> Huy xuat vien do benh nhan chua thanh toan!\n");
-            getchar();
+            while (getchar() != '\n');
             return;
         }
         listPatients[index].debt = 0;
         printf("=> Thanh toan thanh cong! Cong no hien tai: 0 VND\n");
     }
 
-    printf("\n=> Xuat vien thanh cong!\n");
-    for (int i = 0; i < n_records; ) {
+    printf("=> Xuat vien thanh cong!\n");
+    for (i = 0; i < n_records; ) {
+    	int j=i;
         if (strcmp(listRecords[i].cardId, findId) == 0) {
-            for (int j = i; j < n_records - 1; j++)
+            for (j = i; j < n_records - 1; j++)
                 listRecords[j] = listRecords[j + 1];
             n_records--;
         } else {
             i++; 
         }
     }
-    for (int i = index; i < n_patients - 1; i++) {
-        listPatients[i] = listPatients[i + 1];
+    int k=index;
+    for (k = index; k < n_patients - 1; k++) {
+        listPatients[k] = listPatients[k + 1];
     }
     n_patients--;
-
     printf("=> Da xoa thong tin benh nhan va lich su kham!\n");
     getchar();
 }
