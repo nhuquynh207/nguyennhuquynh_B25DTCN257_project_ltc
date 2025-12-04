@@ -17,7 +17,7 @@ typedef struct Record{
 	char status[20];
 }Record;
 struct Record listRecords[MAX];
-int n_records=5;
+int n_records=15;
 struct Patient listPatients[MAX];
 int n_patients=10;
 int isNumeric(char phone[]);
@@ -42,6 +42,11 @@ int main(){
 	Patient pt8={"108","Nguyen Thi Khanh Huyen","0925426136",100000,9};
 	Patient pt9={"109","Pham Anh Dung","0895426136",0,30};
 	Patient pt10={"110","Pham Thi Dung","0894526136",20000000,1};
+	Patient pt11={"111", "Le Thi Mai", "0987654321",50000,2};
+	Patient pt12={"112", "Trinh Hoang An", "0933445566",150000,4};
+	Patient pt13={"113", "Hoang Van Duc", "0945678901",0,7};
+	Patient pt14={"114", "Tran Thi Thao", "0966778899",1000000,1};
+	Patient pt15={"115", "Vu Dinh Quang", "0977889900",250000,5};
 	
 	listPatients[0]=pt1;
 	listPatients[1]=pt2;
@@ -53,6 +58,11 @@ int main(){
 	listPatients[7]=pt8;
 	listPatients[8]=pt9;
 	listPatients[9]=pt10;
+	listPatients[10] = pt11;
+	listPatients[11] = pt12;
+	listPatients[12] = pt13;
+	listPatients[13] = pt14;
+	listPatients[14] = pt15;
 	
 	struct Record r;
 	Record r1={"RC001","101","12/1/2025","Tai kham"};
@@ -60,12 +70,32 @@ int main(){
 	Record r3={"RC003","103","20/8/2025","Theo doi"};
 	Record r4={"RC004","104","12/11/2025","Tai kham"};
 	Record r5={"RC005","105","31/10/2025","Da xuat vien"};
+	Record r6 = {"RC006", "106", "05/02/2025", "Tai kham"};
+	Record r7 = {"RC007", "107", "15/03/2025", "Theo doi"};
+	Record r8 = {"RC008", "108", "28/04/2025", "Da xuat vien"};
+	Record r9 = {"RC009", "109", "10/05/2025", "Tai kham"};
+	Record r10 = {"RC010", "110", "01/06/2025", "Theo doi"};
+	Record r11 = {"RC011", "111", "17/07/2025", "Tai kham"};
+	Record r12 = {"RC012", "112", "09/09/2025", "Da xuat vien"};
+	Record r13 = {"RC013", "113", "25/10/2025", "Theo doi"};
+	Record r14 = {"RC014", "114", "07/11/2025", "Tai kham"};
+	Record r15 = {"RC015", "115", "30/12/2025", "Da xuat vien"};
 	
 	listRecords[0]=r1;
 	listRecords[1]=r2;
 	listRecords[2]=r3;
 	listRecords[3]=r4;
 	listRecords[4]=r5;
+	listRecords[5] = r6;
+	listRecords[6] = r7;
+	listRecords[7] = r8;
+	listRecords[8] = r9;
+	listRecords[9] = r10;
+	listRecords[10] = r11;
+	listRecords[11] = r12;
+	listRecords[12] = r13;
+	listRecords[13] = r14;
+	listRecords[14] = r15;
 	
 	int choose;
 	
@@ -294,6 +324,11 @@ void updatePatientInfo() {
             printf("=>Khong ton tai ID nay!\n");
             continue;
         }
+        if(strcmp(listRecords[index].status,"Da xuat vien")==0){
+        	printf("Benh nhan da xuat vien,khong the sua thong tin.\n");
+        	getchar();
+        	return;
+		}
         printf("Da tim thay thong tin benh nhan!!!\n");
         break; 
     }
@@ -326,9 +361,9 @@ void dischargePatient() {
         printf("=> Danh sach benh nhan rong!\n");
         return;
     }
-
     char findId[10];
     int index = -1;
+    int i, k;
     while (1) {
         printf("Nhap ma ho so benh nhan can xuat vien: ");
         fgets(findId, sizeof(findId), stdin);
@@ -338,26 +373,38 @@ void dischargePatient() {
             printf("=> Khong duoc de trong!\n");
             continue;
         }
+        for (i = 0; i < n_patients; i++) {
+            if (strcmp(listPatients[i].cardId, findId) == 0) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index == -1) {
+            printf("=> Khong tim thay benh nhan voi ma so %s\n", findId);
+            continue;
+        }
         break;
     }
-    int i=0;
-    for (i = 0; i < n_patients; i++) {
-        if (strcmp(listPatients[i].cardId, findId) == 0) {
-            index = i;
+    int daXuatVien = 0;
+    for (i = 0; i < n_records; i++) {
+        if (strcmp(listRecords[i].cardId, findId) == 0 &&
+            strcmp(listRecords[i].status, "Da xuat vien") == 0) 
+        {
+            daXuatVien = 1;
             break;
         }
     }
-
-    if (index == -1) {
-        printf("=> Khong tim thay benh nhan voi ma ho so %s\n", findId);
+    if (daXuatVien) {
+        printf("=> Benh nhan nay da xuat vien truoc do!\n");
+        getchar();
         return;
     }
     if (listPatients[index].debt > 0) {
         int choice;
-
         printf("\nBenh nhan hien con no: %.0lf VND\n", listPatients[index].debt);
         printf("1. Thanh toan cong no\n");
-        printf("2. Khong thanh toan va HUY thao tac\n"); 
+        printf("2. Huy thao tac xuat vien\n");
         printf("Nhap lua chon: ");
 
         while (scanf("%d", &choice) != 1 || (choice != 1 && choice != 2)) {
@@ -365,34 +412,28 @@ void dischargePatient() {
             while (getchar() != '\n');
         }
         while (getchar() != '\n');
+
         if (choice == 2) {
-            printf("=> Huy xuat vien do benh nhan chua thanh toan!\n");
-            while (getchar() != '\n');
+            printf("=> Huy xuat vien do benh nhan con no!\n");
             return;
         }
         listPatients[index].debt = 0;
-        printf("=> Thanh toan thanh cong! Cong no hien tai: 0 VND\n");
+        printf("=> Da thanh toan cong no. Cong no hien tai: 0 VND\n");
     }
-
-    printf("=> Xuat vien thanh cong!\n");
-    for (i = 0; i < n_records; ) {
-    	int j=i;
+    printf("\n=> Xuat vien thanh cong!\n");
+    for (i = 0; i < n_records; i++) {
         if (strcmp(listRecords[i].cardId, findId) == 0) {
-            for (j = i; j < n_records - 1; j++)
-                listRecords[j] = listRecords[j + 1];
-            n_records--;
-        } else {
-            i++; 
+            strcpy(listRecords[i].status, "Da xuat vien");
         }
     }
-    int k=index;
     for (k = index; k < n_patients - 1; k++) {
         listPatients[k] = listPatients[k + 1];
     }
     n_patients--;
-    printf("=> Da xoa thong tin benh nhan va lich su kham!\n");
-    getchar();
+
+    printf("=> Da cap nhat va xoa benh nhan khoi danh sach hien tai!\n");
 }
+
 //F04:Hien thi danh sach benh nhan 
 void showCurrentPatients(){
 	int pageSize=4;
@@ -661,8 +702,8 @@ void medicalHistory(){ //F08:lich su kham benh cua benh nhan
 			continue;
 		}
 		int i=0;
-		for(i=0;i<n_patients;i++){
-			if(strcmp(listPatients[i].cardId,inputId)==0){
+		for(i=0;i<n_records;i++){
+			if(strcmp(listRecords[i].cardId,inputId)==0){
 				index=i;
 				break;
 			}
@@ -673,7 +714,7 @@ void medicalHistory(){ //F08:lich su kham benh cua benh nhan
 		}
 		break;
 	}
- 	printf("\nLich kham cua benh nhan: %s\n", listPatients[index].name);
+ 	printf("\nLich kham cua benh nhan (ID:%s)\n", inputId);
     printf("| ID Rec |  Ngay kham  |Trang thai|\n");
     printf("-----------------------------------\n");
     int i=0;
