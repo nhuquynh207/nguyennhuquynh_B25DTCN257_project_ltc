@@ -172,6 +172,16 @@ int patientIdExisted(const char cardId[]){
 	}
 	return 1;
 }
+void normalizeLeadingSpace(char *s) {
+    int i = 0;
+    while (s[i] == ' ')
+        i++;
+    if (s[i] != '\0') {
+        char temp[100];
+        strcpy(temp,s+i);          
+        strcpy(s,temp);    
+    }
+}
 int isFull() {
     if (n_patients >= MAX) {
         return 1;
@@ -224,7 +234,6 @@ int onlyAlphabet(const char *str) {
 }
 //F01:Tiep nhan benh nhan
 void createNewPatient(){
-
 	if (isFull() == 1) {
         printf("Danh sach benh nhan da day. Khong the them moi.\n");
         return; 
@@ -263,6 +272,7 @@ void createNewPatient(){
 			printf("Ten benh nhan chi chua ky tu chu cai.\n");
 			continue;
 		}
+		normalizeLeadingSpace(listPatients[pos].name);
 		break;
 	}
 	while(1){
