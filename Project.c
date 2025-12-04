@@ -19,7 +19,7 @@ typedef struct Record{
 struct Record listRecords[MAX];
 int n_records=15;
 struct Patient listPatients[MAX];
-int n_patients=10;
+int n_patients=15;
 int isNumeric(char phone[]);
 int patientIdExisted(const char cardId[]);
 void createNewPatient();
