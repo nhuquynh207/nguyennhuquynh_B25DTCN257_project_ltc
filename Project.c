@@ -425,12 +425,13 @@ void dischargePatient() {
 
         if (choice == 2) {
             printf("=> Huy xuat vien do benh nhan con no!\n");
+            getchar();
             return;
         }
         listPatients[index].debt = 0;
         printf("=> Da thanh toan cong no. Cong no hien tai: 0 VND\n");
     }
-    printf("\n=> Xuat vien thanh cong!\n");
+    printf("=> Xuat vien thanh cong!\n");
     for (i = 0; i < n_records; i++) {
         if (strcmp(listRecords[i].cardId, findId) == 0) {
             strcpy(listRecords[i].status, "Da xuat vien");
@@ -442,6 +443,7 @@ void dischargePatient() {
     n_patients--;
 
     printf("=> Da cap nhat va xoa benh nhan khoi danh sach hien tai!\n");
+    getchar();
 }
 
 //F04:Hien thi danh sach benh nhan 
